@@ -1,0 +1,13 @@
+language: ruby
+cache: bundler
+rvm:
+  - 2.1.6
+  - 2.2.2
+  - jruby-19mode
+  - rbx-2
+  - ruby-head
+  - jruby-head
+jdk:
+  - openjdk7
+  - oraclejdk7
+  - oraclejdk8
