@@ -37,3 +37,24 @@ def test_blacklist_removal
     x.compare!
   end
 end
+
+def test_flatten_uniq
+  Benchmark.ips do |x|
+    ary5k1k = (1..5_000).map { |a| (1..10_000).to_a.sample(1000) }
+
+    x.report('flatten.uniq') {
+      #because we do an inline in others, have to dup first
+      ary5k1k.dup.flatten.uniq
+    }
+    x.report('flatten!;uniq!') {
+      a = ary5k1k.dup
+      a.flatten!
+      a.uniq!
+    }
+    x.report('union') {
+      ary5k1k.dup.reduce(:|)
+    }
+
+    x.compare!
+  end
+end
