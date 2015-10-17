@@ -1,4 +1,3 @@
-require 'spec_helper'
 RSpec.describe Array do
   it "value reject" do
     Benchmark.ips do |x|

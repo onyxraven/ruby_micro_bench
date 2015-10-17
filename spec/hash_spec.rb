@@ -1,4 +1,3 @@
-require 'spec_helper'
 RSpec.describe Hash do
 
   it 'iterate all values' do
