@@ -1,3 +1,6 @@
+require 'active_support/inflector'
+require 'faker'
+
 RSpec.describe String do
 
   it 'iterate chars' do
@@ -29,4 +32,35 @@ RSpec.describe String do
     end
   end
 
+  it "replaces spaces with underscores" do
+    Benchmark.ips do |x|
+      str = Faker::Name.name
+
+      x.report("tr(' ', '_')") do
+        str.tr(' ', '_')
+      end
+
+      x.report("gsub(' ', '_')") do
+        str.gsub(' ', '_')
+      end
+    end
+  end
+
+  it "dasherizes" do
+    Benchmark.ips do |x|
+      str = Faker::Internet.user_name(nil, %w(_))
+
+      x.report("dasherize") do
+        str.dasherize
+      end
+
+      x.report("tr('_', '-')") do
+        str.tr('_', '-')
+      end
+
+      x.report("gsub('_', '-')") do
+        str.gsub('_', '-')
+      end
+    end
+  end
 end
