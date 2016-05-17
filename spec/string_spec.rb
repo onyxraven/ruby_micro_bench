@@ -1,3 +1,5 @@
+require 'active_support/inflector'
+
 RSpec.describe String do
 
   it 'iterate chars' do
@@ -29,4 +31,35 @@ RSpec.describe String do
     end
   end
 
+  it "replaces spaces with underscores" do
+    Benchmark.ips do |x|
+      str = Random.new.bytes(1024)
+
+      x.report("tr(' ', '_')") do
+        str.tr(' ', '_')
+      end
+
+      x.report("gsub(' ', '_')") do
+        str.gsub(' ', '_')
+      end
+    end
+  end
+
+  it "dasherizes" do
+    Benchmark.ips do |x|
+      str = Random.new.bytes(1024)
+
+      x.report("dasherize") do
+        str.dasherize
+      end
+
+      x.report("tr('_', '-')") do
+        str.tr('_', '-')
+      end
+
+      x.report("gsub('_', '-')") do
+        str.gsub('_', '-')
+      end
+    end
+  end
 end
