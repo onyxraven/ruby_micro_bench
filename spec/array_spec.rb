@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 RSpec.describe Array do
   it "value reject" do
     Benchmark.ips do |x|
@@ -72,6 +74,29 @@ RSpec.describe Array do
         ary10k.uniq!
       }
       x.compare!
+    end
+  end
+
+  it 'uniq vs set' do
+    Benchmark.ips do |x|
+      ary1k = (1..10_000).to_a.sample(1000)
+      num = 100
+
+      x.report('Array.uniq') {
+        ary = []
+        num.times do
+          ary1k.each { |i| ary << i }
+        end
+        ary.uniq
+      }
+
+      x.report('Set.<<') {
+        ary = Set.new
+        num.times do
+          ary1k.each { |i| ary << i }
+        end
+      }
+
     end
   end
 end
