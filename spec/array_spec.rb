@@ -77,7 +77,37 @@ RSpec.describe Array do
     end
   end
 
-  it 'uniq vs union vs set' do
+  it 'uniq vs union' do
+    Benchmark.ips do |x|
+      ary1k = (1..10_000).to_a.sample(1000)
+      num = 100
+
+      x.report('Array.concat.uniq') {
+        ary = []
+        num.times do
+          ary1k.each { |i| ary.concat([i]) }
+        end
+        ary.uniq
+      }
+
+      x.report('Array.|') {
+        ary = []
+        num.times do
+          ary1k.each { |i| ary |= [i] }
+        end
+      }
+
+      x.report('Array.concat.|') {
+        ary = []
+        num.times do
+          ary1k.each { |i| ary.concat([i]) }
+        end
+        ary |= ary
+      }
+    end
+  end
+
+  it 'uniq vs set' do
     Benchmark.ips do |x|
       ary1k = (1..10_000).to_a.sample(1000)
       num = 100
@@ -88,13 +118,6 @@ RSpec.describe Array do
           ary1k.each { |i| ary << i }
         end
         ary.uniq
-      }
-
-      x.report('Array.|') {
-        ary = []
-        num.times do
-          ary1k.each { |i| ary |= [i] }
-        end
       }
 
       x.report('Set.<<') {
