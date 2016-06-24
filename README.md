@@ -19,28 +19,16 @@ After cloning the repo, install gems with `bundle install`.
 
 ## Running Benchmarks
 
-Open an `irb` console with Bundler:
+Whole benchmark files can be run as follows:
 
 ```
-$ bundle exec irb
+$ bundle exec rspec spec/hash_spec.rb
 ```
 
-Load dependencies:
+To run a single example by name, use the following example:
 
 ```
-> Bundler.require
-```
-
-Load the file(s) with the benchmark(s) you wish to test:
-
-```
-> require './hash_test.rb'
-```
-
-Run the desired benchmarks(s):
-
-```
-> test_value_iteration
+$ bundle exec rspec spec/hash_test.rb -e 'iterate all values'
 ```
 
 ## Inspirations, References
