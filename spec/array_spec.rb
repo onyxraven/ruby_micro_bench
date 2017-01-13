@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'active_support/core_ext'
 
 RSpec.describe Array do
   it "value reject" do
@@ -134,6 +135,20 @@ RSpec.describe Array do
     Benchmark.ips do |x|
       x.report('times.map') { 5.times.map{} }
       x.report('Array.new') { Array.new(5){} }
+      x.compare!
+    end
+  end
+
+  it 'present' do
+    Benchmark.ips do |x|
+      empty10k = Array.new(10_000)
+
+      x.report('present?') {
+        empty10k.present?
+      }
+      x.report('any?') {
+        empty10k.any?
+      }
       x.compare!
     end
   end
