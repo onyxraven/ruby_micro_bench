@@ -130,6 +130,14 @@ RSpec.describe Array do
 
     end
   end
+  
+  it 'times map vs Array.new' do
+    Benchmark.ips do |x|
+      x.report('times.map') { 5.times.map{} }
+      x.report('Array.new') { Array.new(5){} }
+      x.compare!
+    end
+  end
 
   it 'present' do
     Benchmark.ips do |x|
