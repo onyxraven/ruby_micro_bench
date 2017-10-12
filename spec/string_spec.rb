@@ -23,11 +23,11 @@ RSpec.describe String do
       }
       x.report('at index for') {
         for pos in 0..str.length - 1
-          c = str[pos]; i += 1
+          _ = str[pos]; i += 1
         end
       }
       x.report('at index each') {
-        (0..str.length - 1).each { |n| c = str[n]; i += 1 }
+        (0..str.length - 1).each { |n| _ = str[n]; i += 1 }
       }
     end
   end
@@ -61,6 +61,77 @@ RSpec.describe String do
       x.report("gsub('_', '-')") do
         str.gsub('_', '-')
       end
+    end
+  end
+
+  it "string to_s" do
+    Benchmark.ips do |x|
+      str = Faker::Internet.user_name(nil, %w(_))
+
+      x.report("self") do
+        _ = str
+      end
+
+      x.report("to_s") do
+        _ = str.to_s
+      end
+
+      x.report("to_sym") do
+        _ = str.to_sym
+      end
+
+      x.report("dup") do
+        _ = str.dup
+      end
+
+      x.report('conditional') do
+        str = str.to_s unless str.is_a?(String)
+      end
+
+    end
+  end
+
+  it 'to_sym vs freeze' do
+    Benchmark.ips do |x|
+
+      x.report("to_sym") do
+        str = Faker::Internet.user_name(nil, %w(_)).dup
+        _ = str.to_sym
+      end
+      x.report("freeze") do
+        str = Faker::Internet.user_name(nil, %w(_)).dup
+        _ = str.freeze
+      end
+
+    end
+  end
+
+  it 'freeze if frozen' do
+    Benchmark.ips do |x|
+      base = Faker::Internet.user_name(nil, %w(_))
+
+      x.report("freeze") do
+        str = base.dup
+        base.freeze
+        _ = str.freeze
+      end
+
+      x.report("frozen") do
+        str = base.dup.freeze
+        _ = str.freeze
+      end
+
+      x.report("conditional freeze") do
+        str = base.dup
+        base.freeze
+        _ = str.freeze unless str.frozen?
+      end
+
+      x.report("conditional frozen") do
+        str = base.dup.freeze
+        _ = str.freeze unless str.frozen?
+      end
+
     end
   end
 end
