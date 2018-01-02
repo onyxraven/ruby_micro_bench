@@ -134,4 +134,31 @@ RSpec.describe String do
 
     end
   end
+
+  it 'include substring' do
+    Benchmark.ips do |x|
+      base = [].fill(0, 10) { Faker::Internet.ip_v4_address }
+      string = base.join(', ').freeze
+      fake = Faker::Internet.ip_v4_address.freeze
+
+      x.report("include") do
+        sample = base.sample(1).first.freeze
+        expect(string.include?(sample)).to eq true
+        string.include?(fake)
+      end
+
+      x.report("brackets") do
+        sample = base.sample(1).first.freeze
+        expect(string[sample]).to_not be nil
+        string[fake]
+      end
+
+      x.report("regex") do
+        sample = base.sample(1).first.freeze
+        expect(string.match?(/#{sample.gsub('.', '\.')}/)).to eq true
+        string.match?(/#{fake.gsub('.', '\.')}/)
+      end
+
+    end
+  end
 end
