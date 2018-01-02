@@ -1,10 +1,9 @@
 language: ruby
 cache: bundler
 rvm:
-  - 2.1.6
-  - 2.2.2
+  - 2.4.3
+  - 2.5.0
   - jruby-19mode
-  - rbx-2
   - ruby-head
   - jruby-head
 jdk:

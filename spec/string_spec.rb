@@ -155,7 +155,7 @@ RSpec.describe String do
 
       x.report("regex") do
         sample = base.sample(1).first.freeze
-        expect(string.match?(/#{sample.gsub('.', '\.')}/)).to eq true
+        expect(string.match(/#{sample.gsub('.', '\.')}/)).to_not be nil
         string.match?(/#{fake.gsub('.', '\.')}/)
       end
 
