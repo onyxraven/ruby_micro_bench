@@ -22,3 +22,7 @@ matrix:
       jdk: oraclejdk11
     - rvm: truffleruby
       jdk: oraclejdk8
+
+before_install:
+  - gem update --system
+  - gem install bundler -v '< 2' #because... why

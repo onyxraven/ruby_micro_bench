@@ -1,3 +1,14 @@
+#define any extensions we want to test too
+module Enumerable
+  def index_hashes_by_id
+    if block_given?
+      each_with_object({}) { |elem, memo| memo[elem[:id]] = yield(elem) }
+    else
+      each_with_object({}) { |elem, memo| memo[elem[:id]] = elem }
+    end
+  end
+end
+
 RSpec.describe Hash do
 
   it 'iterate all values' do
@@ -54,11 +65,23 @@ RSpec.describe Hash do
       }
 
       x.report('each_with_object') {
-        list.each_with_object({}) { |arg, memo| memo[arg[:id]] = arg[:value] }
+        list.each_with_object({}) { |arg, memo| memo[arg[:id]] = arg }
       }
 
       x.report('reduce') {
-        list.reduce({}) { |memo, arg| memo[arg[:id]] = arg[:value]; memo }
+        list.reduce({}) { |memo, arg| memo[arg[:id]] = arg; memo }
+      }
+
+      x.report('index_hashes_by_id') {
+        list.index_hashes_by_id
+      }
+
+      x.report('index_hashes_by_id call block') {
+        list.index_hashes_by_id { |i| i[:value] ** 3 }
+      }
+
+      x.report('each_with_object call') {
+        list.each_with_object({}) { |arg, memo| memo[arg[:id]] = arg[:value] ** 3 }
       }
 
       x.compare!
