@@ -45,4 +45,24 @@ RSpec.describe Hash do
     end
   end
 
+  it 'construct from enumerable' do
+    Benchmark.ips do |x|
+      list = (1..10_000).map { |a| { id: a, value: rand(10_000) } }
+
+      x.report('Hash[]') {
+        Hash[list.map { |i| [i[:id], i[:value]] }]
+      }
+
+      x.report('each_with_object') {
+        list.each_with_object({}) { |arg, memo| memo[arg[:id]] = arg[:value] }
+      }
+
+      x.report('reduce') {
+        list.reduce({}) { |memo, arg| memo[arg[:id]] = arg[:value]; memo }
+      }
+
+      x.compare!
+    end
+  end
+
 end
