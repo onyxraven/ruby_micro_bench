@@ -1,12 +1,24 @@
 language: ruby
 cache: bundler
-rvm:
-  - 2.4.3
-  - 2.5.0
-  - jruby-19mode
-  - ruby-head
-  - jruby-head
-jdk:
-  - openjdk7
-  - oraclejdk7
-  - oraclejdk8
+
+matrix:
+  include:
+    - rvm: 2.4
+    - rvm: 2.5
+    - rvm: 2.6
+    - rvm: 2.6
+      env:
+        - RUBYOPT=--jit
+    - rvm: ruby-head
+    - rvm: jruby-19mode
+      jdk: oraclejdk11
+    - rvm: jruby-19mode
+      jdk: oraclejdk8
+    - rvm: jruby-head
+      jdk: oraclejdk11
+    - rvm: jruby-head
+      jdk: oraclejdk8
+    - rvm: truffleruby
+      jdk: oraclejdk11
+    - rvm: truffleruby
+      jdk: oraclejdk8

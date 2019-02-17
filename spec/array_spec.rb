@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'active_support'
 require 'active_support/core_ext'
 
 RSpec.describe Array do
@@ -130,7 +131,7 @@ RSpec.describe Array do
 
     end
   end
-  
+
   it 'times map vs Array.new' do
     Benchmark.ips do |x|
       x.report('times.map') { 5.times.map{} }
