@@ -1,28 +1,36 @@
 language: ruby
 cache: bundler
 
+env:
+  global:
+    - "JRUBY_OPTS='--dev -J-Xmx1024M'"
+    - JAVA_OPTS=-Xmx1024m
+    - RUBYOPT=-w
+
 matrix:
   include:
     - rvm: 2.4
     - rvm: 2.5
     - rvm: 2.6
-    - rvm: 2.6
-      env:
-        - RUBYOPT=--jit
+    - name: "2.6 MJIT"
+      rvm: 2.6
+      env: RUBYOPT="--jit"
     - rvm: ruby-head
-    - rvm: jruby-19mode
+    - name: "HEAD MJIT"
+      rvm: ruby-head
+      env: RUBYOPT="--jit"
+    - name: "JRUBY-HEAD 11"
+      rvm: jruby-head
       jdk: oraclejdk11
-    - rvm: jruby-19mode
-      jdk: oraclejdk8
-    - rvm: jruby-head
-      jdk: oraclejdk11
-    - rvm: jruby-head
+    - name: "JRUBY-HEAD 8"
+      rvm: jruby-head
       jdk: oraclejdk8
     - rvm: truffleruby
-      jdk: oraclejdk11
+  allow_failures:
+    - name: "JRUBY-HEAD 11"
+    - name: "JRUBY-HEAD 8"
     - rvm: truffleruby
-      jdk: oraclejdk8
 
 before_install:
   - gem update --system
-  - gem install bundler -v '< 2' #because... why
+  - gem install bundler # -v '< 2' #because... why?

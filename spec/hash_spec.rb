@@ -57,11 +57,15 @@ RSpec.describe Hash do
   end
 
   it 'construct from enumerable' do
-    Benchmark.ips do |x|
+    Benchmark.ips(warmup: 5, time: 10) do |x|
       list = (1..10_000).map { |a| { id: a, value: rand(10_000) } }
 
       x.report('Hash[]') {
-        Hash[list.map { |i| [i[:id], i[:value]] }]
+        Hash[list.map { |i| [i[:id], i] }]
+      }
+
+      x.report('to_h') {
+        list.map { |i| [i[:id], i] }.to_h
       }
 
       x.report('each_with_object') {
@@ -76,12 +80,20 @@ RSpec.describe Hash do
         list.index_hashes_by_id
       }
 
+      x.compare!
+    end
+  end
+
+  it 'block vs direct call' do
+    Benchmark.ips(warmup: 5, time: 10) do |x|
+      list = (1..10_000).map { |a| { id: a, value: rand(10_000) } }
+
       x.report('index_hashes_by_id call block') {
-        list.index_hashes_by_id { |i| i[:value] ** 3 }
+        list.index_hashes_by_id { |i| i[:value] * 3 }
       }
 
-      x.report('each_with_object call') {
-        list.each_with_object({}) { |arg, memo| memo[arg[:id]] = arg[:value] ** 3 }
+      x.report('each_with_object direct') {
+        list.each_with_object({}) { |arg, memo| memo[arg[:id]] = arg[:value] * 3 }
       }
 
       x.compare!
