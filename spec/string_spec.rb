@@ -1,34 +1,37 @@
-require 'active_support'
-require 'active_support/inflector'
-require 'faker'
+require "active_support"
+require "active_support/inflector"
+require "faker"
 
 RSpec.describe String do
-
-  it 'iterate chars' do
+  it "iterate chars" do
     Benchmark.ips do |x|
       str = Random.new.bytes(1024)
 
       i = 0
-      x.report('split') {
-        str.split('').each { |c| i += 1 }
-      }
-      x.report('scan') {
+      x.report("split") do
+        str.split("").each { |c| i += 1 }
+      end
+      x.report("scan") do
         str.scan(/./) { |c| i += 1 }
-      }
-      x.report('each_char') {
+      end
+      x.report("each_char") do
         str.each_char { |c| i += 1 }
-      }
-      x.report('each_byte') {
-        #trick is it is doing character.chr, but sometimes thats what you want anyway
+      end
+      x.report("each_byte") do
+        # trick is it is doing character.chr, but sometimes thats what you want anyway
         str.each_byte { |c| i += 1 }
-      }
-      x.report('at index for') {
-        for pos in 0..str.length - 1
-          _ = str[pos]; i += 1
+      end
+      x.report("at index for") do
+        (0..str.length - 1).each do |pos|
+          _ = str[pos]
+          i += 1
         end
-      }
-      x.report('at index each') {
-        (0..str.length - 1).each { |n| _ = str[n]; i += 1 }
+      end
+      x.report("at index each") {
+        (0..str.length - 1).each do |n|
+          _ = str[n]
+          i += 1
+        end
       }
     end
   end
@@ -38,36 +41,36 @@ RSpec.describe String do
       str = Faker::Name.name
 
       x.report("tr(' ', '_')") do
-        str.tr(' ', '_')
+        str.tr(" ", "_")
       end
 
       x.report("gsub(' ', '_')") do
-        str.gsub(' ', '_')
+        str.tr(" ", "_")
       end
     end
   end
 
   it "dasherizes" do
     Benchmark.ips do |x|
-      str = Faker::Internet.user_name(nil, %w(_))
+      str = Faker::Internet.username(separators: %w[_])
 
       x.report("dasherize") do
         str.dasherize
       end
 
       x.report("tr('_', '-')") do
-        str.tr('_', '-')
+        str.tr("_", "-")
       end
 
       x.report("gsub('_', '-')") do
-        str.gsub('_', '-')
+        str.tr("_", "-")
       end
     end
   end
 
   it "string to_s" do
     Benchmark.ips do |x|
-      str = Faker::Internet.user_name(nil, %w(_))
+      str = Faker::Internet.username(separators: %w[_])
 
       x.report("self") do
         _ = str
@@ -85,31 +88,28 @@ RSpec.describe String do
         _ = str.dup
       end
 
-      x.report('conditional') do
+      x.report("conditional") do
         str = str.to_s unless str.is_a?(String)
       end
-
     end
   end
 
-  it 'to_sym vs freeze' do
+  it "to_sym vs freeze" do
     Benchmark.ips do |x|
-
       x.report("to_sym") do
-        str = Faker::Internet.user_name(nil, %w(_)).dup
+        str = Faker::Internet.username(separators: %w[_]).dup
         _ = str.to_sym
       end
       x.report("freeze") do
-        str = Faker::Internet.user_name(nil, %w(_)).dup
+        str = Faker::Internet.username(separators: %w[_]).dup
         _ = str.freeze
       end
-
     end
   end
 
-  it 'freeze if frozen' do
+  it "freeze if frozen" do
     Benchmark.ips do |x|
-      base = Faker::Internet.user_name(nil, %w(_))
+      base = Faker::Internet.username(separators: %w[_])
 
       x.report("freeze") do
         str = base.dup
@@ -132,14 +132,13 @@ RSpec.describe String do
         str = base.dup.freeze
         _ = str.freeze unless str.frozen?
       end
-
     end
   end
 
-  it 'include substring' do
+  it "include substring" do
     Benchmark.ips do |x|
       base = [].fill(0, 10) { Faker::Internet.ip_v4_address }
-      string = base.join(', ').freeze
+      string = base.join(", ").freeze
       fake = Faker::Internet.ip_v4_address.freeze
 
       x.report("include") do
@@ -159,7 +158,6 @@ RSpec.describe String do
         expect(string.match(/#{sample.gsub('.', '\.')}/)).to_not be nil
         string.match?(/#{fake.gsub('.', '\.')}/)
       end
-
     end
   end
 end

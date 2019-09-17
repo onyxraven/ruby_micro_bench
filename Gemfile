@@ -1,9 +1,10 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-gem 'benchmark-ips'
-gem 'benchmark-bigo'
-gem 'rspec'
-gem 'pry'
-gem 'activesupport'
-gem 'faker'
-gem 'rake'
+gem "benchmark-ips"
+gem "benchmark-bigo"
+gem "rspec"
+gem "pry"
+gem "activesupport"
+gem "faker", "~> 2.3.0"
+gem "rake"
+gem "standard"
