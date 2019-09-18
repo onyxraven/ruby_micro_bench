@@ -28,6 +28,7 @@ matrix:
     - rvm: truffleruby
   allow_failures:
     - rvm: jruby-head
+    - rvm: ruby-head
     - name: "HEAD MJIT"
     - name: "JRUBY-HEAD 11"
     - name: "JRUBY-HEAD 8"
