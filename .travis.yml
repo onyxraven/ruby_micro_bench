@@ -14,11 +14,11 @@ matrix:
     - rvm: 2.6
     - name: "2.6 MJIT"
       rvm: 2.6
-      env: RUBYOPT="--jit"
+      env: jit=yes
     - rvm: ruby-head
     - name: "HEAD MJIT"
       rvm: ruby-head
-      env: RUBYOPT="--jit"
+      env: jit=yes
     - name: "JRUBY-HEAD 11"
       rvm: jruby-head
       jdk: openjdk11
@@ -36,3 +36,6 @@ matrix:
 before_install:
   - gem update --system
   - gem install bundler # -v '< 2' #because... why?
+
+before_script:
+  - if [ "$jit" == "yes" ]; then export RUBYOPT=--jit ; fi ; echo RUBYOPT is $RUBYOPT
