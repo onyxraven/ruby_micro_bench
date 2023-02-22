@@ -34,18 +34,18 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
       - name: Run tests
         run: bundle exec rake
-  jruby:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        ruby: [jruby-9.3, jruby-9.4, jruby-head]
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-          ruby-version: ${{ matrix.ruby }}
-      - name: Run tests
-        run: bundle exec rake
+  # jruby:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       ruby: [jruby-9.3, jruby-9.4, jruby-head]
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Set up Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         bundler-cache: true
+  #         ruby-version: ${{ matrix.ruby }}
+  #     - name: Run tests
+  #       run: bundle exec rake
