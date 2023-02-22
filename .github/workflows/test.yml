@@ -35,8 +35,6 @@ jobs:
       - name: Run tests
         run: bundle exec rake
   jruby:
-    env:
-      JAVA_OPTS: '-XX:+TieredCompilation -XX:TieredStopAtLevel=1 -Xms60M -Xmx2G -XX:InitialCodeCacheSize=40M -XX:ReservedCodeCacheSize=120M'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
